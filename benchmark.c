@@ -1,14 +1,19 @@
 /*
 Benchmark developed by Sinan Alkaya
 using OpenMP written in C
+last change: allowing larger arraytypes through malloc
 */
 #include <omp.h>
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#define arrValue 30000
 int maxInt = 2147483647;
 clock_t begin, end;
-int data[199];
+
+int *data = NULL;
+
+
 double integer(){
     begin = clock();
     int valuetest = 0;
@@ -28,13 +33,15 @@ double integer_parallel(){
         value++;
     }
     end = clock();
+    maxInt = 0;
     return (double)(end-begin) / CLOCKS_PER_SEC;
 }
 
 double init_array(){
     //fill array with random Data
+    data = (int *)malloc(arrValue * sizeof(int));
     srand(time(NULL));
-    for(int i=0; i< sizeof(data); i++){
+    for(int i=0; i< arrValue; i++){
         int r = rand();
         data[i] = r;
     }
@@ -52,7 +59,7 @@ double sortArray(){
     */
     clock_t end, begin;
     begin = clock();
-    for(i=1;i<sizeof(data);i++)
+    for(i=1;i<arrValue;i++)
     {
         for(j=0;j<sizeof(data)-1;j++){
             if(data[j] > data[j+1]){
@@ -63,17 +70,11 @@ double sortArray(){
         }
     }
     end = clock();
-    //useless: double delta = (double)(end-begin) / CLOCKS_PER_SEC;
-    //printf("\nArray after Sort:\n");
-    /*
-    for(int x=0; x<sizeof(data); x++){
-        printf("%d,",data[x]);
-    }
-    */
     return (double)(end-begin) / CLOCKS_PER_SEC;
 }
 
 int main(){
+    //Memory validity check:
     printf("-----Welcome to Turbo-Guacamole-----\n");
     printf("Initializing...\n");
     init_array();
@@ -90,6 +91,9 @@ int main(){
     double delta_arr_proced = sortArray();
     printf("\ntook %f seconds\n",delta_arr_proced);
     printf("\n------------DONE------------\n");
+
+    //FREE MALLOCS
+    free(data);
     return 0;
 }
 
