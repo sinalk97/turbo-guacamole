@@ -49,9 +49,30 @@ double init_array(){
 }
 
 double sortArray(){
-    
+    init_array();
     int i,j,tmp;
     begin = clock();
+    for(i=1;i<arrValue;i++)
+    {
+        for(j=0;j<sizeof(data)-1;j++){
+            if(data[j] > data[j+1]){
+                tmp = data[j];
+                data[j] = data[j+1];
+                data[j+1] = tmp;
+            }
+        }
+    }
+    end = clock();
+    return (double)(end-begin) / CLOCKS_PER_SEC;
+}
+
+double sortArray_parallel(){
+    //Renew array:
+    init_array();
+    int i,j,tmp;
+    begin = clock();
+    
+    #pragma omp parallel for 
     for(i=1;i<arrValue;i++)
     {
         for(j=0;j<sizeof(data)-1;j++){
@@ -70,19 +91,23 @@ int main(){
     //Memory validity check:
     printf("-----Welcome to Turbo-Guacamole-----\n");
     printf("Initializing...\n");
-    init_array();
+    
     printf("Initialization completed");
-    printf("\n--------------------------------\ntesting Integer Performance Sequentially");
+    printf("\n--------------------------------\ntesting Integer performance sequentially");
     double value = integer();
     printf("\ntook %f seconds\n", value);
 
-    printf("\n--------------------------------\ntesting Integer Performance Parallel");
+    printf("\n--------------------------------\ntesting Integer performance parallel");
     double value_p = integer_parallel();
     printf("\ntook %f seconds\n",value_p);
 
-    printf("\n--------------------------------\ntesting Sort performance using Bubblesort");
+    printf("\n--------------------------------\ntesting Sort performance using Bubblesort sequentially");
     double delta_arr_proced = sortArray();
     printf("\ntook %f seconds\n",delta_arr_proced);
+
+    printf("\n--------------------------------\ntesting Sort performance using Bubblesort parallel");
+    double delta_arr_paral = sortArray_parallel();
+    printf("\ntook %f seconds\n",delta_arr_paral);
     printf("\n------------DONE------------\n");
 
     //FREE MALLOCS
