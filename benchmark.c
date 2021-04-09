@@ -71,15 +71,17 @@ double sortArray_parallel(){
     init_array();
     int i,j,tmp;
     begin = clock();
-    
-    #pragma omp parallel for 
-    for(i=1;i<arrValue;i++)
+    #pragma omp parallel shared(tmp) private(i,j)
     {
-        for(j=0;j<sizeof(data)-1;j++){
-            if(data[j] > data[j+1]){
-                tmp = data[j];
-                data[j] = data[j+1];
-                data[j+1] = tmp;
+        #pragma omp for
+        for(i=1;i<arrValue;i++)
+        {
+            for(j=0;j<sizeof(data)-1;j++){
+                if(data[j] > data[j+1]){
+                    tmp = data[j];
+                    data[j] = data[j+1];
+                    data[j+1] = tmp;
+                }
             }
         }
     }
