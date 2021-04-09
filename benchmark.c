@@ -7,7 +7,7 @@ last change: allowing larger arraytypes through malloc
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
-#define arrValue 30000
+#define arrValue 300000000
 int maxInt = 2147483647;
 clock_t begin, end;
 
@@ -51,13 +51,6 @@ double init_array(){
 double sortArray(){
     
     int i,j,tmp;
-    /*
-    printf("\nArray before Sort:\n");
-    for(int x=0; x<sizeof(data); x++){
-        printf("%d,",data[x]);
-    }
-    */
-    clock_t end, begin;
     begin = clock();
     for(i=1;i<arrValue;i++)
     {
