@@ -90,7 +90,8 @@ double sortArray_parallel(){
 }
 
 int main(){
-    //Memory validity check:
+    
+
     printf("-----Welcome to Turbo-Guacamole-----\n");
     printf("Initializing...\n");
     
